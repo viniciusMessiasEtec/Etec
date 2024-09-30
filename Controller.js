@@ -2,11 +2,9 @@ const express=require('express');
 const cors=require('cors');
 const bodyParser=require('body-parser');
 const app=express();
-
 /************************************** */
 app.use(bodyParser.json());
 /***************************************/
-
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 const models=require('./models');
@@ -16,8 +14,7 @@ app.get('/',(req,res)=>{
 });
 /* Instanciando modelos de Banco */
 let user=models.User;
-let tracking=models.Tracking;
-let product=models.Product;
+
 
 app.get('/create',async (req,res)=>{
     let create=await user.create({
