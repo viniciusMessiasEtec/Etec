@@ -10,43 +10,42 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const models=require('./models');
 
 app.get('/',(req,res)=>{
-    res.send('Servidor backend já está rodando!');
+    res.send('O servidor está ON!');
 });
 /* Instanciando modelos de Banco */
-let user=models.User;
+let usuario=models.Usuario;
 
-
-app.get('/create',async (req,res)=>{
-    let create=await user.create({
-        name: "messias.v",
-        password: "4321",
+app.post('/criarUsuario',async (req,res)=>{
+    let create=await usuario.create({
+        nome: req.body.nome,
+        password: req.body.password,
         createdAt: new Date(),
         updatedAt: new Date()
     });
 });
-   app.get('/read', async (req,res)=>{
-        let read=await user.findAll({
+   app.get('/listarUsuario', async (req,res)=>{
+        let read=await usuario.findAll({
             raw:true,
         });
         console.log(read);
     });
 
-app.get('/update', async (req,res)=> {
-    let update=await user.findByPk(4).then((response)=>{
-            response.name="Flavio";
+    app.get('/atualizarUsuario', async (req,res)=> {
+    let update=await usuario.findByPk(req.body.id).then((response)=>{
+            response.nome="Flavio";
             response.save();
     });
     console.log(update);
 });
-       app.get('/delete', async (req,res)=> {
-        user.destroy({
-            where: {id:2}
+       app.get('/deletarUsuario', async (req,res)=> {
+        usuario.destroy({
+            where: {id:req.body.id}
         });
     });
     
-    app.post('/login',async (req,res)=>{
-        let response=await user.findOne({
-            where:{name:req.body.name, password: req.body.password}
+    app.get('/login',async (req,res)=>{
+        let response=await usuario.findOne({
+            where:{nome:req.body.nome, password: req.body.password}
             
         });
         if(response === null){
